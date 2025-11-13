@@ -21,6 +21,11 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "Pluto AI", statusBarStyle: "black-translucent" },
   assets: "/Logo_banner.png",
   classification: "AI Research tool",
+  icons: {
+    icon: "/logo.svg",
+    apple: "/logo.png",
+    shortcut: "/logo.png",
+  },
   keywords: [
     'AI',
     'artificial intelligence',
@@ -46,7 +51,7 @@ export const metadata: Metadata = {
     type: 'website',
     description: 'Improve your research quality & efficiency by 70%',
     countryName: 'US',
-    images: ['/Logo_banner.png', 'logo.png'] 
+    images: ['/Logo_banner.png', 'logo.png'],
   }
 };
 
@@ -62,7 +67,7 @@ export default function RootLayout({
           <SidebarProvider>
             <AppSidebar />
             <SidebarTrigger />
-            <main className='w-full h-full p-6'>
+            <main className='w-full p-6'>
               {children}
             </main>
           </SidebarProvider>

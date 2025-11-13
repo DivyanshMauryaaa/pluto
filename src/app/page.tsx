@@ -376,7 +376,7 @@ Remember: Be natural, helpful, and use research strategically to enhance the con
   };
 
   return (
-    <div className='flex flex-col h-screen'>
+    <div className='flex flex-col'>
       {/* Messages Area */}
       <div className='flex-1 overflow-y-auto pb-32'>
         <div className='max-w-4xl mx-auto px-6 py-8'>

@@ -41,10 +41,10 @@ const AppSidebar = () => {
     const chatIdParam = searchParams.get('c');
 
     return (
-        <Sidebar>
+        <Sidebar className="h-full">
             <SidebarHeader>
-                <div className="text-4xl font-semibold hover:text-indigo-500 hover:rotate-3 transition-all duration-300 cursor-pointer flex justify-between">
-                    Pluto AI
+                <div className="text-4xl font-semibold cursor-pointer flex justify-between">
+                    <Link href={'/'}>Pluto AI</Link>
                     <UserButton />
                 </div>
                 <SidebarSeparator />
