@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
+import { Trash2 } from "lucide-react";
 
 const AppSidebar = () => {
 
@@ -41,7 +42,7 @@ const AppSidebar = () => {
     const chatIdParam = searchParams.get('c');
 
     return (
-        <Sidebar className="h-full">
+        <Sidebar className="h-full w-[20%]" variant="inset" >
             <SidebarHeader>
                 <div className="text-4xl font-semibold cursor-pointer flex justify-between">
                     <Link href={'/'}>Pluto AI</Link>
@@ -49,14 +50,18 @@ const AppSidebar = () => {
                 </div>
                 <SidebarSeparator />
             </SidebarHeader>
-            <SidebarContent className="p-3">
+            <SidebarContent className="p-3 w-[100%]">
                 <SidebarMenu>
                     {chats.map((chat: any) => (
                         <Link href={`?c=${chat.id}`} key={chat.id}>
                             <SidebarMenuItem className={`p-4 border rounded-lg border-gray-300 cursor-pointer hover:bg-primary hover:text-white ${chatIdParam === chat.id && ' bg-primary text-white'}`}>
                                 {chat.title}
+                                <Trash2 size={16} className="mt-2" onClick={async () => {
+                                    const { error } = await supabase.from('chats').delete().eq('id', chat.id);
+                                    if (error) throw error.message;
+                                    fetchChats();
+                                }} />
                             </SidebarMenuItem>
-
                         </Link>
                     ))}
                 </SidebarMenu>

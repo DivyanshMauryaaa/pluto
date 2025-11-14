@@ -9,6 +9,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { OpenAI } from 'openai/client.js';
 import MarkdownRenderer from '@/components/ui/mdrenderer';
+import { CONVERSATIONAL_AI_PROMPT } from '@/prompts';
 
 const api = new OpenAI({
   apiKey: process.env.NEXT_PUBLIC_AIML_API_KEY!,
@@ -57,12 +58,12 @@ const StreamingMessage = ({ content, isComplete }: { content: string; isComplete
   }, [content, isComplete]);
 
   return (
-    <p className='whitespace-pre-wrap break-words leading-relaxed'>
+    <div className='whitespace-pre-wrap break-words leading-relaxed'>
       <MarkdownRenderer content={displayedContent} />
       {isComplete && displayedContent.length < content.length && (
         <span className='inline-block w-1 h-4 bg-current ml-0.5 animate-pulse' />
       )}
-    </p>
+    </div>
   );
 };
 
@@ -270,44 +271,11 @@ export default function Home() {
 
       // Call AI with conversation history
       const completion = await api.chat.completions.create({
-        model: "google/gemini-2.0-flash",
+        model: "google/gemini-2.5-flash",
         messages: [
           {
             role: "system",
-            content: `You are Pluto, an intelligent research assistant. You help users explore topics deeply by providing insightful responses and conducting detailed research when needed.
-
-Your capabilities:
-- Engage in natural, conversational dialogue
-- Break down complex topics into understandable explanations
-- Trigger deep research using: <startResearch prompt="specific research query"> when user demands, or when you feel like.
-- Provide immediate insights while research is being conducted
-- Synthesize information from multiple sources
-
-When to use <startResearch>:
-- User asks for detailed information on a specific topic
-- Question requires current data, statistics, or comprehensive analysis
-- Topic needs multi-faceted exploration
-- User explicitly requests research or deep dive
-
-Response guidelines:
-1. Always acknowledge the user's question naturally
-2. Provide an initial thoughtful response based on general knowledge
-3. If research would be valuable, explain what you'll research and trigger it
-4. Use <startResearch prompt="your detailed research query"> when appropriate
-5. Keep your tone conversational, helpful, and engaging
-6. Don't overuse research - only when truly beneficial
-
-Example response structure:
-"That's a great question about [topic]! Let me share some initial thoughts...
-
-[Your immediate insights here]
-
-To give you more comprehensive information, I'll research this in detail.
-<startResearch prompt="detailed analysis of [specific aspect]">
-
-The research results will provide deeper insights into [what they'll learn]." If the user's response requires for a research. Otherwise, you can stick to normal chatting
-
-Remember: Be natural, helpful, and use research strategically to enhance the conversation.`
+            content: CONVERSATIONAL_AI_PROMPT
           },
           ...conversationHistory
         ],
@@ -393,7 +361,7 @@ Remember: Be natural, helpful, and use research strategically to enhance the con
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {msg.role === 'assistant' && (
-                    <div className='flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center'>
+                    <div className='flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center'>
                       <Bot className='w-5 h-5 text-white' />
                     </div>
                   )}
@@ -418,7 +386,7 @@ Remember: Be natural, helpful, and use research strategically to enhance the con
               ))}
               {sending && state !== 'Idle' && (
                 <div className='flex gap-3 justify-start'>
-                  <div className='flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center'>
+                  <div className='flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center'>
                     <Bot className='w-5 h-5 text-white' />
                   </div>
                   <div className='bg-muted/50 backdrop-blur rounded-2xl px-4 py-3 flex items-center gap-3'>
@@ -439,32 +407,32 @@ Remember: Be natural, helpful, and use research strategically to enhance the con
               </p>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl'>
                 <button
-                  onClick={() => setMessage("Explain quantum computing in simple terms")}
+                  onClick={() => setMessage("Search for the Fastest growing startups in the month from proper sources & tell me their niche, problem they solve, cost & impact. Tell me about atleast 50 startups.")}
                   className='p-4 text-left rounded-xl border bg-card hover:bg-accent transition-colors'
                 >
                   <BookOpen className='w-5 h-5 mb-2 text-primary' />
-                  <p className='font-medium text-sm'>Explain quantum computing</p>
+                  <p className='font-medium text-sm'>Fastest Growing Startups</p>
                 </button>
                 <button
-                  onClick={() => setMessage("What are the latest developments in AI?")}
+                  onClick={() => setMessage("Ask me about my product & then do deep research on the market niche on people's opinions (X, YT, Reddit, Instagram etc.) & industry opinions to identify the success rate of my product.")}
                   className='p-4 text-left rounded-xl border bg-card hover:bg-accent transition-colors'
                 >
                   <Sparkles className='w-5 h-5 mb-2 text-primary' />
-                  <p className='font-medium text-sm'>Latest AI developments</p>
+                  <p className='font-medium text-sm'>Help me validate my product-market fit</p>
                 </button>
                 <button
-                  onClick={() => setMessage("Research renewable energy trends")}
+                  onClick={() => setMessage("What are the latest tech inventions, foundations & explorations humanity has achieved this year, Also how can they impact different industries.")}
                   className='p-4 text-left rounded-xl border bg-card hover:bg-accent transition-colors'
                 >
                   <Search className='w-5 h-5 mb-2 text-primary' />
-                  <p className='font-medium text-sm'>Renewable energy trends</p>
+                  <p className='font-medium text-sm'>Latest Tech Upgrades</p>
                 </button>
                 <button
-                  onClick={() => setMessage("How does the human brain process emotions?")}
+                  onClick={() => setMessage("Help me identify success rate of the feature by asking me question about my my product & the new feature.")}
                   className='p-4 text-left rounded-xl border bg-card hover:bg-accent transition-colors'
                 >
                   <Bot className='w-5 h-5 mb-2 text-primary' />
-                  <p className='font-medium text-sm'>Brain and emotions</p>
+                  <p className='font-medium text-sm'>Help me plan my feature</p>
                 </button>
               </div>
             </div>
@@ -487,12 +455,16 @@ Remember: Be natural, helpful, and use research strategically to enhance the con
             shadow-none
             bg-background/80 backdrop-blur
             focus:border-primary/40 ring-none
-            placeholder:text-muted-foreground/70 
+            placeholder:text-muted-foreground/70
+            focus:border-blue-600
+            focus:ring-blue-600
           "
                 placeholder={currentChatId ? "Ask a follow up" : "Ask any detail & I'll give you the best detailed research."}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={handleKeyPress}
+                autoFocus
+                
               />
 
               {/* Subtle pulse dot when typing */}

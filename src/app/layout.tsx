@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   authors: { name: "Divyansh Maurya", url: "https://github.com/DivyanshMauryaaa" },
   category: "AI Researcher for Founders",
   generator: "Next Js",
-  abstract: "Dont let your company go down because of bad research, use Pluto AI.",
+  abstract: "Human grade analysis with AI Efficiency.",
   appleWebApp: { capable: true, title: "Pluto AI", statusBarStyle: "black-translucent" },
   assets: "/Logo_banner.png",
   classification: "AI Research tool",
