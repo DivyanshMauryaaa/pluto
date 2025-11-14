@@ -258,7 +258,7 @@ export default function Home() {
       // Reload messages to include the new user message IMMEDIATELY
       await loadChatMessages(chatId);
 
-      setState('Thinking');
+      setState("Pluto's Thinking 🤔");
 
       // Build conversation history for context
       const { data: currentMessages } = await supabase
